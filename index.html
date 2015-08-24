@@ -1,0 +1,52 @@
+<!doctype html>
+<html ng-app="ShareMsgApp">
+  <head>
+    <title>Text Share</title>
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      #deleteBtn { float: right; margin: -5px 0 0 0; }
+      #messagebox { margin-bottom: 42px; }
+      #form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      #form input { border: 0; padding: 10px; width: 74%; margin-right: .5%; }
+      #form button { width: 25%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+      #messages li p { padding: 8px 0 8px 0; }
+      #messageshistory { list-style-type: none; margin: 0; padding: 0; }
+      #messageshistory li { padding: 5px 10px; }
+      #messageshistory li:nth-child(odd) { background: #eee; }
+    </style>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="jquery.min.js"></script>
+    <script src="angular.min.js"></script>
+    <script src="mainapp.js"></script>
+  </head>
+  <body ng-controller="mainCtrl">
+    <div id="messagebox">
+      <ul id="messages">
+        <li ng-repeat="x in msgs" ng-switch on="x.msg.substring(0,7)">
+          <p ng-switch-when="http://"><a href="{{x.msg}}">{{x.msg}}</a><button data-id="{{x.id}}" id="deleteBtn" ng-click="deleteMsg(this)">Delete</button></p>
+          <p ng-switch-default>{{x.msg}}<button ng-disabled="false" data-id="{{x.id}}" id="deleteBtn" ng-click="deleteMsg(this)">Delete</button></p>
+        </li>
+      </ul>
+    </div>
+    <div id="bottom"></div>
+    <div id="form">
+      <input id="m" autocomplete="off" ng-model="message"><button ng-click="msgEmit(this)" ng-disabled="ifInputEmpty()">Send</button>
+    </div>
+    <!--script>
+      var socket = io();
+      $('form').submit(function(){
+        socket.emit('chat message', $('#m').val());
+        $('#m').val('');
+        return false;
+      });
+      socket.on('chat message', function(msg){
+        $('#messages').append($('<li>').text(msg));
+      });
+    </script-->
+  </body>
+</html>

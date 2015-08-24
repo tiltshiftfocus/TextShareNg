@@ -1,0 +1,16 @@
+{
+  "name": "textshare",
+  "version": "1.0.0",
+  "description": "Share some text over network",
+  "main": "index.js",
+  "dependencies": {
+    "socket.io": "^1.2.0",
+    "sqlite3": "^3.0.10",
+    "express": "^4.10.2",
+    "forever-monitor": "^1.6.0",
+    "angularjs-scroll-glue": "^2.0.4"
+  },
+  "devDependencies": {},
+  "author": "Jerry",
+  "license": "ISC"
+}
