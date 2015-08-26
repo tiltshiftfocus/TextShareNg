@@ -42,7 +42,16 @@ io.on('connection', function(socket){
 	});
 
 	socket.on('delete message', function(id){
-		var stmt = db.prepare("DELETE FROM messages WHERE ID = (?)");
+		var stmt = db.prepare("DELETE FROM messages WHERE ID = (?)", function(){
+			var i = currentMessages.length;
+			while(i--){
+			    if(currentMessages[i].id == id){
+			        currentMessages.splice(i,1);
+			    }
+			}
+
+			io.emit('update message', currentMessages);
+		});
 		stmt.run(id);
 		stmt.finalize();
 	});

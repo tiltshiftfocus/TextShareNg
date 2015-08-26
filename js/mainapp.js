@@ -126,22 +126,15 @@ function mainCtrl($scope, $compile, anchorSmoothScroll){
     }
 	
 
-	socket.on('chat message', function(msg, id){
-  	//angular.element('#messages').append($('<li>').text(msg));
-  	// var elem = angular.element( document.querySelector( '#messages' ) );
-   //  var eleCompile = '';
-  	// if(msg.substring(0,4) == 'http'){
-   //      eleCompile = $compile('<li><p><a href="\''+msg+'\'">'+ msg +'</a><button data-id="'+id+'" id="deleteBtn" ng-click="deleteMsg(this)">Delete</button></p></li>')($scope);
-  	// 	elem.append(eleCompile);	
-  	// }else{
-   //      eleCompile = $compile('<li><p>'+ msg +'<button ng-disabled="false" data-id="'+id+'" id="deleteBtn" ng-click="deleteMsg(this)">Delete</button></p></li>')($scope); 
-  	// 	elem.append(eleCompile);	
-  	// }
-  	// $scope.$apply();
+    socket.on('chat message', function(msg, id){
+        $scope.msgs.push({"id": id, "msg": msg});
+        $scope.$apply();
 
-    $scope.msgs.push({"id": id, "msg": msg});
-    $scope.$apply();
+        anchorSmoothScroll.scrollTo('bottom');
+    });
 
-  	anchorSmoothScroll.scrollTo('bottom');
-  });
+    socket.on('update message', function(data){
+        $scope.msgs = data;
+        $scope.$apply();
+    });
 }
