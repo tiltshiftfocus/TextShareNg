@@ -124,6 +124,16 @@ function mainCtrl($scope, $compile, anchorSmoothScroll){
         }
         socket.emit('delete message', idToDel);
     }
+
+    $scope.checkHttp = function(str){
+        var tarea = str;
+        var tarea_regex = /^(http|https|www)/;
+        if(tarea_regex.test(String(tarea).toLowerCase()) == true)
+        {
+            return true;
+        }
+        return false;
+    }
 	
 
     socket.on('chat message', function(msg, id){

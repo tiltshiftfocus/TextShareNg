@@ -27,8 +27,8 @@
   <body ng-controller="mainCtrl">
     <div id="messagebox">
       <ul id="messages">
-        <li ng-repeat="x in msgs" ng-switch on="x.msg.substring(0,7)">
-          <p ng-switch-when="http://"><a href="{{x.msg}}">{{x.msg}}</a><button data-id="{{x.id}}" id="deleteBtn" ng-click="deleteMsg(this)">Delete</button></p>
+        <li ng-repeat="x in msgs" ng-switch on="checkHttp(x.msg)">
+          <p ng-switch-when="true"><a href="{{x.msg}}">{{x.msg}}</a><button data-id="{{x.id}}" id="deleteBtn" ng-click="deleteMsg(this)">Delete</button></p>
           <p ng-switch-default>{{x.msg}}<button ng-disabled="false" data-id="{{x.id}}" id="deleteBtn" ng-click="deleteMsg(this)">Delete</button></p>
         </li>
       </ul>
