@@ -15,11 +15,11 @@ app.directive('removeOnClick', function() {
 app.directive('whenScrolled', ['$timeout', function($timeout) {
     return function(scope, elm, attr) {
         var raw = elm[0];
-        
+
         $timeout(function() {
-            raw.scrollTop = raw.scrollHeight;          
-        });         
-        
+            raw.scrollTop = raw.scrollHeight;
+        });
+
         elm.bind('scroll', function() {
             if (raw.scrollTop <= 100) { // load more items before you hit the top
                 var sh = raw.scrollHeight
@@ -34,9 +34,9 @@ app.service('anchorSmoothScroll', function(){
 
 	this.scrollTo = function(eID) {
 
-        // This scrolling function 
+        // This scrolling function
         // is from http://www.itnewb.com/tutorial/Creating-the-Smooth-Scroll-Effect-with-JavaScript
-        
+
         var startY = currentYPosition();
         var stopY = elmYPosition(eID);
         var distance = stopY > startY ? stopY - startY : startY - stopY;
@@ -58,7 +58,7 @@ app.service('anchorSmoothScroll', function(){
         	setTimeout("window.scrollTo(0, "+leapY+")", timer * speed);
         	leapY -= step; if (leapY < stopY) leapY = stopY; timer++;
         }
-        
+
         function currentYPosition() {
             // Firefox, Chrome, Opera, Safari
             if (self.pageYOffset) return self.pageYOffset;
@@ -69,7 +69,7 @@ app.service('anchorSmoothScroll', function(){
             if (document.body.scrollTop) return document.body.scrollTop;
             return 0;
         }
-        
+
         function elmYPosition(eID) {
         	var elm = document.getElementById(eID);
         	var y = elm.offsetTop;
@@ -81,7 +81,7 @@ app.service('anchorSmoothScroll', function(){
         }
 
     };
-    
+
 });
 
 
@@ -91,10 +91,11 @@ function mainCtrl($scope, $compile, anchorSmoothScroll){
 	//var allmsg = [];
 
 	socket.on('dbmsg', function(data){
+        //console.log(data);
 		$scope.msgs = data;
 		//allmsg = data;
 		$scope.$apply();
-		anchorSmoothScroll.scrollTo('bottom');
+		//anchorSmoothScroll.scrollTo('bottom');
 	});
 
 	$scope.msgEmit = function(){
@@ -110,18 +111,18 @@ function mainCtrl($scope, $compile, anchorSmoothScroll){
 	}
 
 	$scope.loadMore = function(){
-		
+
 	}
 
     $scope.deleteMsg = function(data){
-        console.log(data);
+        //console.log(data);
         var idToDel = data.x.id;
         var i = $scope.msgs.length;
-        while(i--){
-            if($scope.msgs[i].id == idToDel){
-                $scope.msgs.splice(i,1);
-            }
-        }
+        // while(i--){
+        //     if($scope.msgs[i].id == idToDel){
+        //         $scope.msgs.splice(i,1);
+        //     }
+        // }
         socket.emit('delete message', idToDel);
     }
 
@@ -134,13 +135,13 @@ function mainCtrl($scope, $compile, anchorSmoothScroll){
         }
         return false;
     }
-	
+
 
     socket.on('chat message', function(msg, id){
-        $scope.msgs.push({"id": id, "msg": msg});
+        $scope.msgs.unshift({"id": id, "msg": msg});
         $scope.$apply();
 
-        anchorSmoothScroll.scrollTo('bottom');
+        //anchorSmoothScroll.scrollTo('bottom');
     });
 
     socket.on('update message', function(data){

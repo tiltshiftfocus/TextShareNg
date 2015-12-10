@@ -21,19 +21,20 @@ app.get('/', function(req, res){
 
 io.on('connection', function(socket){
 	currentMessages = [];
-	db.each("SELECT rowid AS id, msg FROM messages", 
+	db.each("SELECT rowid AS id, msg FROM messages ORDER BY id DESC",
 		function(err, row){
 		currentMessages.push({"id": row.id, "msg": row.msg});
 	},
 		function(){
 			socket.emit('dbmsg', currentMessages);
 		});
-	
+
 
 	socket.on('chat message', function(msg){
 		var stmt = db.prepare("Insert INTO messages (msg) VALUES (?)", function(){
 			db.get("SELECT id FROM messages ORDER BY id DESC LIMIT 1", function(err, row){
 				io.emit('chat message', msg, row.id);
+				currentMessages.unshift({"id": row.id, "msg": msg});
 			});
 
 		});
@@ -57,6 +58,8 @@ io.on('connection', function(socket){
 	});
 });
 
-http.listen(3000, function(){
-	console.log('listening on *:3000');
+var portNum = 9002;
+
+http.listen(portNum, function(){
+	console.log('listening on *:'+portNum);
 });
