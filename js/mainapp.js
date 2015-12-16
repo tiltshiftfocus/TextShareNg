@@ -2,6 +2,20 @@ var socket = io();
 
 var app = angular.module('TextShareApp',['ionic']);
 
+app.factory('focus', function($timeout, $window) {
+    return function(id) {
+      // timeout makes sure that is invoked after any other event has been triggered.
+      // e.g. click events that need to run before the focus or
+      // inputs elements that are in a disabled state but are enabled when those events
+      // are triggered.
+      $timeout(function() {
+        var element = $window.document.getElementById(id);
+        if(element)
+          element.focus();
+      });
+    };
+  })
+
 app.directive('removeOnClick', function() {
     return {
         link: function(scope, elt, attrs) {
@@ -86,7 +100,7 @@ app.service('anchorSmoothScroll', function(){
 
 
 app.controller('mainCtrl', mainCtrl);
-function mainCtrl($scope, $compile, anchorSmoothScroll){
+function mainCtrl($scope, $compile, anchorSmoothScroll, focus){
 
 	//var allmsg = [];
 
@@ -96,11 +110,13 @@ function mainCtrl($scope, $compile, anchorSmoothScroll){
 		//allmsg = data;
 		$scope.$apply();
 		//anchorSmoothScroll.scrollTo('bottom');
+        focus('m');
 	});
 
 	$scope.msgEmit = function(){
 		socket.emit('chat message', $scope.message);
 		$scope.message = '';
+        focus('m');
 	}
 
 	$scope.ifInputEmpty = function(){

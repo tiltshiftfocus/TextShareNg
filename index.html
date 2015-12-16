@@ -42,7 +42,7 @@
       <div id="form">
         <div class="item item-input-inset" style="border: none;">
           <label class="item-input-wrapper">
-            <input type="text" placeholder="Send text..." id="m" ng-model="message">
+            <input type="text" placeholder="Send text..." id="m" ng-model="message" ng-keyup="$event.keyCode == 13 && msgEmit(this)">
           </label>
           <button class="button button-small" ng-click="msgEmit(this)" ng-disabled="ifInputEmpty()">
             Send
