@@ -1,52 +1,56 @@
-<!doctype html>
-<html ng-app="ShareMsgApp">
-  <head>
-    <title>Text Share</title>
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { font: 13px Helvetica, Arial; }
-      #deleteBtn { float: right; margin: -5px 0 0 0; }
-      #messagebox { margin-bottom: 42px; }
-      #form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-      #form input { border: 0; padding: 10px; width: 74%; margin-right: .5%; }
-      #form button { width: 25%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-      #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages li { padding: 5px 10px; }
-      #messages li:nth-child(odd) { background: #eee; }
-      #messages li p { padding: 8px 0 8px 0; }
-      #messageshistory { list-style-type: none; margin: 0; padding: 0; }
-      #messageshistory li { padding: 5px 10px; }
-      #messageshistory li:nth-child(odd) { background: #eee; }
-    </style>
-    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-    <script src="jquery.min.js"></script>
-    <script src="angular.min.js"></script>
-    <script src="mainapp.js"></script>
-  </head>
-  <body ng-controller="mainCtrl">
-    <div id="messagebox">
-      <ul id="messages">
-        <li ng-repeat="x in msgs" ng-switch on="checkHttp(x.msg)">
-          <p ng-switch-when="true"><a href="{{x.msg}}">{{x.msg}}</a><button id="deleteBtn" ng-click="deleteMsg(this)">Delete</button></p>
-          <p ng-switch-default>{{x.msg}}<button ng-disabled="false" id="deleteBtn" ng-click="deleteMsg(this)">Delete</button></p>
-        </li>
-      </ul>
-    </div>
-    <div id="bottom"></div>
-    <div id="form">
-      <input id="m" autocomplete="off" ng-model="message"><button ng-click="msgEmit(this)" ng-disabled="ifInputEmpty()">Send</button>
-    </div>
-    <!--script>
-      var socket = io();
-      $('form').submit(function(){
-        socket.emit('chat message', $('#m').val());
-        $('#m').val('');
-        return false;
-      });
-      socket.on('chat message', function(msg){
-        $('#messages').append($('<li>').text(msg));
-      });
-    </script-->
-  </body>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+  <title>Text Share</title>
+
+  <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+
+<!-- ionic/angularjs js -->
+<script src="lib/ionic/js/ionic.bundle.js"></script>
+
+<!-- cordova script (this will be a 404 during development) -->
+<!-- <script src="cordova.js"></script> -->
+
+<!-- your app's js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="js/mainapp.js"></script>
+</head>
+<body ng-app="TextShareApp">
+  <ion-pane ng-controller="mainCtrl">
+
+    <ion-header-bar class="bar-stable">
+      <h1 class="title">Text Share</h1>
+    </ion-header-bar>
+
+    <ion-content>
+      <ion-list>
+        <ion-item class="item-remove-animate item-text-wrap" ng-repeat="x in msgs" type="item-text-wrap" ng-switch on="checkHttp(x.msg)">
+          <p ng-switch-when="true"><a href="{{x.msg}}">{{x.msg}}</a></p>
+          <p ng-switch-default>{{x.msg}}</p>
+          <ion-option-button class="button-assertive" ng-click="deleteMsg(this)">
+            Delete
+          </ion-option-button>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+
+    <ion-footer-bar>
+      <div id="form">
+        <div class="item item-input-inset" style="border: none;">
+          <label class="item-input-wrapper">
+            <input type="text" placeholder="Send text..." id="m" ng-model="message">
+          </label>
+          <button class="button button-small" ng-click="msgEmit(this)" ng-disabled="ifInputEmpty()">
+            Send
+          </button>
+        </div>
+      </div>
+    </ion-footer-bar>
+
+  </ion-pane>
+</body>
 </html>

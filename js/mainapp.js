@@ -1,6 +1,6 @@
 var socket = io();
 
-var app = angular.module('ShareMsgApp',[]);
+var app = angular.module('TextShareApp',['ionic']);
 
 app.directive('removeOnClick', function() {
     return {
